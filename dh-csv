@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Delavska Hranilnica CSV file cleanup script.
+# Changes encoding to UTF-8/
+# Removes excessive columns (if you want to change that, play with the cut command in the last line)
+
+if [ $# -ne 1 ]; then
+    echo $0: 
+    echo "    usage: dh-csv filename"
+    echo "    Datum valute;Prejemnik / Plačnik;Breme;Dobro;Opis prejemnika"
+    exit 1
+fi
+
+FILENAME=$1
+NAME=$(echo "$FILENAME" | cut -d'.' -f1)
+
+echo "Working on "$NAME
+echo $NAME"-utf8.csv created!"
+
+iconv -f WINDOWS-1250 -t UTF-8 "$FILENAME" | tail -n +10 | cut -d';' -f1,5,6,7,10 > "$NAME"-utf8.csv
+
