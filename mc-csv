@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Delavska Hranilnica MasterCard CSV file cleanup script.
+# Removes excessive columns (if you want to change that, play with the cut command in the last line)
+
+if [ $# -ne 1 ]; then
+    echo $0: 
+    echo "    usage: mc-csv filename"
+    echo "    Payee;Date;Amount (Flipping value) "
+    echo "    Flip value! "
+    exit 1
+fi
+
+FILENAME=$1
+NAME=$(echo "$FILENAME" | cut -d'.' -f1)
+
+echo "Working on "$NAME
+echo $NAME"-clean.csv created!"
+
+tail -n +2 "$FILENAME" | cut -d';' -f3,1,4 > "$NAME"-clean.csv
+
